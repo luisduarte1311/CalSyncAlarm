@@ -1,0 +1,23 @@
+@"
+# Built application files
+*.apk
+*.aar
+*.bundle
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# Android build outputs & temporary files
+build/
+app/build/
+.gradle/
+
+# Local configuration
+local.properties
+
+# OS files
+.DS_Store
+Thumbs.db
+"@ | Set-Content -Encoding utf8 .gitignore
