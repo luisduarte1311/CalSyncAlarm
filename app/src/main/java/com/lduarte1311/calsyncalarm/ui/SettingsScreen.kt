@@ -114,6 +114,16 @@ fun SettingsScreen(
     var showSnoozeDialog by remember { mutableStateOf(false) }
     var showPreAlarmDialog by remember { mutableStateOf(false) }
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
+    var showAboutDialog by remember { mutableStateOf(false) }
+
+    // Versão lida do sistema (vem de versionName em build.gradle.kts)
+    val versionName = remember {
+        try {
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName
+        } catch (_: Exception) {
+            null
+        } ?: "?"
+    }
 
     // Diálogos de tempo personalizado
     var showCustomOffsetDialog by remember { mutableStateOf(false) }
@@ -423,7 +433,7 @@ fun SettingsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "CalSyncAlarm v1.4",
+                            text = "CalSyncAlarm v$versionName",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -434,8 +444,17 @@ fun SettingsScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                         )
 
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextButton(onClick = { showAboutDialog = true }) {
+                            Text(
+                                text = "Sobre e informações",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
                         if (isGlobalMode) {
-                            Spacer(modifier = Modifier.height(12.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
                             TextButton(
                                 onClick = {
                                     try {
@@ -459,6 +478,10 @@ fun SettingsScreen(
                 }
                 Spacer(modifier = Modifier.height(24.dp))
             }
+        }
+
+        if (showAboutDialog) {
+            AboutDialog(onDismiss = { showAboutDialog = false })
         }
 
         // Diálogo 1: Antecedência (Presets + Personalizado)
