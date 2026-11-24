@@ -25,6 +25,8 @@ object AlarmScheduler {
     /**
      * Recolhe as ocorrências ativas dos próximos 30 dias de todos os calendários ativos.
      * Devolve null se a leitura de qualquer calendário ativo falhar (nunca uma lista parcial).
+     * Inclui também eventos que ainda não começaram mas cujo alarme já passou: quem escolhe o
+     * próximo alarme tem de filtrar por alarmTime > now.
      */
     fun getAllUpcomingOccurrences(
         context: Context,
@@ -43,7 +45,8 @@ object AlarmScheduler {
                 calendarColor = cal.color,
                 offsetMinutes = cal.offsetMinutes,
                 disabledKeys = cal.disabledKeys,
-                now = now
+                now = now,
+                includePast = true
             ) ?: return null
             allOccurrences.addAll(list)
         }
@@ -87,6 +90,7 @@ object AlarmScheduler {
             return false
         }
         NotificationHelper.cancelCalendarReadErrorNotification(context)
+        notifyMissedAlarms(context, settings, allOccurrences, now)
 
         val nextOccurrence = allOccurrences.firstOrNull { it.isEnabled && it.alarmTime > now }
 
@@ -244,6 +248,48 @@ object AlarmScheduler {
             NotificationHelper.cancelPreAlarmNotification(context)
         }
         return true
+    }
+
+    /**
+     * Avisa, uma só vez por evento, dos eventos ativos que ainda não começaram mas ficaram sem
+     * alarme porque a antecedência já passou.
+     */
+    private fun notifyMissedAlarms(
+        context: Context,
+        settings: AppSettings,
+        occurrences: List<AlarmOccurrence>,
+        now: Long
+    ) {
+        // Na primeira execução só regista o que já está nesta situação, sem avisar (evita uma
+        // rajada de avisos de eventos cujo alarme já tocou antes desta versão)
+        val firstRun = !settings.noAlarmTrackingStarted
+        val notified = settings.noAlarmNotifiedKeys
+        val newKeys = mutableSetOf<String>()
+
+        for (occ in occurrences) {
+            if (!occ.isEnabled || occ.alarmTime > now || occ.eventStartTime <= now) continue
+            val key = occ.uniqueKey
+            if (key in notified) continue
+            if (!firstRun) {
+                NotificationHelper.showNoAlarmNotification(
+                    context = context,
+                    key = key,
+                    title = occ.title,
+                    eventStartTime = occ.eventStartTime,
+                    offsetMinutes = (occ.eventStartTime - occ.alarmTime) / 60_000L
+                )
+            }
+            newKeys.add(key)
+        }
+
+        // Guardar os novos e esquecer os de eventos com mais de 24 h
+        val limit = now - 24 * 60 * 60 * 1000L
+        val updated = (notified + newKeys).filter {
+            (it.substringAfter('_').toLongOrNull() ?: 0L) >= limit
+        }.toSet()
+        if (firstRun || updated != notified) {
+            settings.noAlarmNotifiedKeys = updated
+        }
     }
 
     /**

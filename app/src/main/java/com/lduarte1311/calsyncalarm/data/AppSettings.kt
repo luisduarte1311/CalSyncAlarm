@@ -29,6 +29,7 @@ class AppSettings(context: Context) {
         private const val KEY_LAST_SYNC_TIME = "last_sync_time"
         private const val KEY_SNOOZE_JSON = "snooze_json"
         private const val KEY_LAST_PRE_ALARM = "last_pre_alarm_key"
+        private const val KEY_NO_ALARM_NOTIFIED = "no_alarm_notified_keys"
 
         // Chaves legadas da V1 para migração automática
         private const val LEGACY_KEY_CALENDAR_ID = "selected_calendar_id"
@@ -84,6 +85,14 @@ class AppSettings(context: Context) {
     var lastPreAlarmKey: String?
         get() = prefs.getString(KEY_LAST_PRE_ALARM, null)
         set(value) = prefs.edit().putString(KEY_LAST_PRE_ALARM, value).apply()
+
+    /** Chaves (eventId_início) dos eventos já avisados de que ficaram sem alarme. */
+    val noAlarmTrackingStarted: Boolean
+        get() = prefs.contains(KEY_NO_ALARM_NOTIFIED)
+
+    var noAlarmNotifiedKeys: Set<String>
+        get() = prefs.getStringSet(KEY_NO_ALARM_NOTIFIED, emptySet())?.toSet() ?: emptySet()
+        set(value) = prefs.edit().putStringSet(KEY_NO_ALARM_NOTIFIED, value).apply()
 
     /* ---------------------------------------------------------
        Gestão de Múltiplos Calendários com Regras Isoladas

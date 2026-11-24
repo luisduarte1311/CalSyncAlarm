@@ -64,6 +64,8 @@ object CalendarReader {
      * Consulta as instâncias de eventos nos próximos 30 dias para o calendário especificado.
      * Aplica os filtros: ALL_DAY == 0, STATUS != STATUS_CANCELED, convite não recusado
      * (SELF_ATTENDEE_STATUS != DECLINED) e alarmTime > agora.
+     * Com includePast = true devolve também os eventos que ainda não começaram mas cujo alarme
+     * já passou (para avisar o utilizador de que ficaram sem alarme).
      * Devolve null se a leitura falhar (sem permissão, erro do fornecedor ou cursor nulo);
      * lista vazia significa que a leitura correu bem e não há eventos.
      */
@@ -74,7 +76,8 @@ object CalendarReader {
         calendarColor: Int = 0,
         offsetMinutes: Int,
         disabledKeys: Set<String>,
-        now: Long = System.currentTimeMillis()
+        now: Long = System.currentTimeMillis(),
+        includePast: Boolean = false
     ): List<AlarmOccurrence>? {
         val occurrences = mutableListOf<AlarmOccurrence>()
         val thirtyDaysInMillis = 30L * 24 * 60 * 60 * 1000L
@@ -136,8 +139,8 @@ object CalendarReader {
 
                     val alarmTime = begin - offsetMillis
 
-                    // Nunca agendar no passado
-                    if (alarmTime > now) {
+                    // Nunca agendar no passado (salvo para avisar de eventos que ficaram sem alarme)
+                    if (alarmTime > now || (includePast && begin > now)) {
                         val key = "${eventId}_${begin}"
                         val isEnabled = !disabledKeys.contains(key)
 

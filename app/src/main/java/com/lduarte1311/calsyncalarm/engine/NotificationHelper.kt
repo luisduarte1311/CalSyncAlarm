@@ -32,6 +32,7 @@ object NotificationHelper {
     const val NOTIFICATION_SNOOZE_ID = 1003
     const val NOTIFICATION_MISSED_ID = 1004
     const val NOTIFICATION_READ_ERROR_ID = 1005
+    private const val NOTIFICATION_NO_ALARM_BASE_ID = 2000
 
     /**
      * Regista todos os canais de notificação necessários no NotificationManager.
@@ -320,5 +321,49 @@ object NotificationHelper {
     fun cancelCalendarReadErrorNotification(context: Context) {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.cancel(NOTIFICATION_READ_ERROR_ID)
+    }
+
+    /**
+     * Avisa que um evento ficou sem alarme porque a antecedência já passou.
+     * Uma notificação por evento (o id deriva da chave do evento).
+     */
+    fun showNoAlarmNotification(
+        context: Context,
+        key: String,
+        title: String,
+        eventStartTime: Long,
+        offsetMinutes: Long
+    ) {
+        createChannels(context)
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val eventHour = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(eventStartTime))
+        val openAppPendingIntent = PendingIntent.getActivity(
+            context,
+            8,
+            Intent(context, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_WARNING_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("Sem alarme para \"$title\"")
+            .setContentText("Evento às $eventHour. A antecedência de ${formatMinutes(offsetMinutes)} já passou.")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+            .setContentIntent(openAppPendingIntent)
+            .build()
+
+        val id = NOTIFICATION_NO_ALARM_BASE_ID + (key.hashCode() and 0x7FFFFFFF) % 1000
+        manager.notify(id, notification)
+    }
+
+    private fun formatMinutes(minutes: Long): String {
+        val h = minutes / 60
+        val m = minutes % 60
+        return when {
+            h == 0L -> "$m min"
+            m == 0L -> "${h}h"
+            else -> "${h}h${m.toString().padStart(2, '0')}"
+        }
     }
 }

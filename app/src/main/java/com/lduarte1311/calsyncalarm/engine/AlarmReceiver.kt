@@ -48,6 +48,11 @@ class AlarmReceiver : BroadcastReceiver() {
                 // Cancela eventual notificação pré-alarme que ainda esteja visível
                 NotificationHelper.cancelPreAlarmNotification(context)
 
+                // Este alarme já tocou: não o tratar depois como "evento sem alarme"
+                if (eventId != -1L && eventStartTime != 0L) {
+                    settings.noAlarmNotifiedKeys = settings.noAlarmNotifiedKeys + "${eventId}_${eventStartTime}"
+                }
+
                 // Iniciar o ForegroundService com o calendarId associado
                 val serviceIntent = Intent(context, AlarmService::class.java).apply {
                     putExtra(AlarmService.EXTRA_CALENDAR_ID, calendarId)
