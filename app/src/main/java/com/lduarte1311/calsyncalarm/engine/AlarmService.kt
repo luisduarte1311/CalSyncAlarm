@@ -125,14 +125,19 @@ class AlarmService : Service() {
         handler.removeCallbacks(timeoutRunnable)
         handler.postDelayed(timeoutRunnable, TIMEOUT_MILLIS)
 
+        // Renovar o wake lock para acompanhar o novo timeout (não acumula: não é contado por referências)
+        wakeLock?.acquire(TIMEOUT_MILLIS + 10_000L)
+
         return START_STICKY
     }
 
     private fun applyVolumeOverride(volumePercent: Int) {
         val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         try {
-            val currentVol = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
-            originalVolume = currentVol
+            // Só guardar o volume original uma vez: num segundo alarme seguido, o volume atual já é o forçado
+            if (originalVolume == null) {
+                originalVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
+            }
 
             val maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)
             val targetVol = (maxVol * (volumePercent / 100f)).roundToInt().coerceIn(1, maxVol)
@@ -152,6 +157,7 @@ class AlarmService : Service() {
                 e.printStackTrace()
             }
         }
+        originalVolume = null
     }
 
     private fun playAlarmSound(soundUriString: String?) {
