@@ -97,37 +97,43 @@ class AppSettings(context: Context) {
             val array = JSONArray(jsonStr)
             val list = mutableListOf<CalendarConfig>()
             for (i in 0 until array.length()) {
-                val obj = array.getJSONObject(i)
-                val disabledArray = obj.optJSONArray("disabledKeys")
-                val disabledSet = mutableSetOf<String>()
-                if (disabledArray != null) {
-                    for (j in 0 until disabledArray.length()) {
-                        disabledSet.add(disabledArray.getString(j))
-                    }
+                // Um registo estragado é ignorado sozinho, sem deitar fora os restantes calendários
+                try {
+                    list.add(parseCalendar(array.getJSONObject(i)))
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-
-                list.add(
-                    CalendarConfig(
-                        id = obj.getLong("id"),
-                        displayName = obj.getString("displayName"),
-                        accountName = obj.optString("accountName", ""),
-                        accountType = obj.optString("accountType", "Local"),
-                        color = obj.optInt("color", 0),
-                        enabled = obj.optBoolean("enabled", true),
-                        offsetMinutes = obj.optInt("offsetMinutes", defaultOffsetMinutes),
-                        soundUri = if (obj.has("soundUri") && !obj.isNull("soundUri")) obj.getString("soundUri") else null,
-                        volumePercent = obj.optInt("volumePercent", defaultVolumePercent),
-                        vibrate = obj.optBoolean("vibrate", defaultVibrate),
-                        snoozeMinutes = obj.optInt("snoozeMinutes", defaultSnoozeMinutes),
-                        preAlarmMinutes = obj.optInt("preAlarmMinutes", defaultPreAlarmMinutes),
-                        disabledKeys = disabledSet
-                    )
-                )
             }
             list
         } catch (e: Exception) {
             emptyList()
         }
+    }
+
+    private fun parseCalendar(obj: JSONObject): CalendarConfig {
+        val disabledArray = obj.optJSONArray("disabledKeys")
+        val disabledSet = mutableSetOf<String>()
+        if (disabledArray != null) {
+            for (j in 0 until disabledArray.length()) {
+                disabledSet.add(disabledArray.getString(j))
+            }
+        }
+
+        return CalendarConfig(
+            id = obj.getLong("id"),
+            displayName = obj.getString("displayName"),
+            accountName = obj.optString("accountName", ""),
+            accountType = obj.optString("accountType", "Local"),
+            color = obj.optInt("color", 0),
+            enabled = obj.optBoolean("enabled", true),
+            offsetMinutes = obj.optInt("offsetMinutes", defaultOffsetMinutes),
+            soundUri = if (obj.has("soundUri") && !obj.isNull("soundUri")) obj.getString("soundUri") else null,
+            volumePercent = obj.optInt("volumePercent", defaultVolumePercent),
+            vibrate = obj.optBoolean("vibrate", defaultVibrate),
+            snoozeMinutes = obj.optInt("snoozeMinutes", defaultSnoozeMinutes),
+            preAlarmMinutes = obj.optInt("preAlarmMinutes", defaultPreAlarmMinutes),
+            disabledKeys = disabledSet
+        )
     }
 
     /**
