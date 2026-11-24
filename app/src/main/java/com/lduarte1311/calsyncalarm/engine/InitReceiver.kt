@@ -6,14 +6,13 @@ import android.content.Intent
 
 /**
  * Receptor de inicialização e alterações de sistema (Boot, fuso horário, atualização de pacote).
- * Compatível com Direct Boot (LOCKED_BOOT_COMPLETED).
+ * Só corre depois do primeiro desbloqueio: antes disso nem as definições nem o calendário estão acessíveis.
  */
 class InitReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             Intent.ACTION_BOOT_COMPLETED,
-            Intent.ACTION_LOCKED_BOOT_COMPLETED,
             Intent.ACTION_TIME_CHANGED,
             Intent.ACTION_TIMEZONE_CHANGED,
             Intent.ACTION_MY_PACKAGE_REPLACED -> {
