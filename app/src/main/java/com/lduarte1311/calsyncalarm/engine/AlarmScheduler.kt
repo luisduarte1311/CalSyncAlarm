@@ -23,11 +23,12 @@ object AlarmScheduler {
 
     /**
      * Recolhe as ocorrências ativas dos próximos 30 dias de todos os calendários ativos.
+     * Devolve null se a leitura de qualquer calendário ativo falhar (nunca uma lista parcial).
      */
     fun getAllUpcomingOccurrences(
         context: Context,
         now: Long = System.currentTimeMillis()
-    ): List<AlarmOccurrence> {
+    ): List<AlarmOccurrence>? {
         val settings = AppSettings(context)
         val activeCalendars = settings.getCalendars().filter { it.enabled }
         if (activeCalendars.isEmpty()) return emptyList()
@@ -42,7 +43,7 @@ object AlarmScheduler {
                 offsetMinutes = cal.offsetMinutes,
                 disabledKeys = cal.disabledKeys,
                 now = now
-            )
+            ) ?: return null
             allOccurrences.addAll(list)
         }
         return allOccurrences.sortedBy { it.alarmTime }
@@ -55,14 +56,16 @@ object AlarmScheduler {
         context: Context,
         now: Long = System.currentTimeMillis()
     ): AlarmOccurrence? {
-        val list = getAllUpcomingOccurrences(context, now)
+        val list = getAllUpcomingOccurrences(context, now) ?: return null
         return list.firstOrNull { it.isEnabled && it.alarmTime > now }
     }
 
     /**
      * Recalcula os eventos de todos os calendários ativos e agenda o próximo alarme no AlarmManager.
+     * Se a leitura do calendário falhar, mantém o que já está agendado, avisa o utilizador e
+     * devolve false. Devolve true quando a leitura correu bem.
      */
-    fun scheduleNextAlarm(context: Context) {
+    fun scheduleNextAlarm(context: Context): Boolean {
         val settings = AppSettings(context)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val now = System.currentTimeMillis()
@@ -73,10 +76,17 @@ object AlarmScheduler {
         val activeCalendars = settings.getCalendars().filter { it.enabled }
         if (activeCalendars.isEmpty()) {
             cancelAll(context)
-            return
+            return true
         }
 
         val allOccurrences = getAllUpcomingOccurrences(context, now)
+        if (allOccurrences == null) {
+            // Falha de leitura não é "sem eventos": não tocar no alarme já agendado
+            NotificationHelper.showCalendarReadErrorNotification(context)
+            return false
+        }
+        NotificationHelper.cancelCalendarReadErrorNotification(context)
+
         val nextOccurrence = allOccurrences.firstOrNull { it.isEnabled && it.alarmTime > now }
 
         // Verificar se há um Snooze ativo no futuro
@@ -142,7 +152,7 @@ object AlarmScheduler {
 
         if (nextTarget == null) {
             cancelAll(context)
-            return
+            return true
         }
 
         // 1. Agendar exatamente 1 setAlarmClock() no AlarmManager
@@ -221,6 +231,7 @@ object AlarmScheduler {
         } else {
             cancelPreAlarm(context)
         }
+        return true
     }
 
     /**

@@ -62,6 +62,8 @@ object CalendarReader {
     /**
      * Consulta as instâncias de eventos nos próximos 30 dias para o calendário especificado.
      * Aplica os filtros: ALL_DAY == 0, STATUS != STATUS_CANCELED e alarmTime > agora.
+     * Devolve null se a leitura falhar (sem permissão, erro do fornecedor ou cursor nulo);
+     * lista vazia significa que a leitura correu bem e não há eventos.
      */
     fun loadUpcomingOccurrences(
         context: Context,
@@ -71,7 +73,7 @@ object CalendarReader {
         offsetMinutes: Int,
         disabledKeys: Set<String>,
         now: Long = System.currentTimeMillis()
-    ): List<AlarmOccurrence> {
+    ): List<AlarmOccurrence>? {
         val occurrences = mutableListOf<AlarmOccurrence>()
         val thirtyDaysInMillis = 30L * 24 * 60 * 60 * 1000L
         val windowEnd = now + thirtyDaysInMillis
@@ -104,15 +106,15 @@ object CalendarReader {
         val offsetMillis = offsetMinutes * 60_000L
 
         try {
-            val cursor: Cursor? = context.contentResolver.query(
+            val cursor: Cursor = context.contentResolver.query(
                 builder.build(),
                 projection,
                 selection,
                 selectionArgs,
                 "${CalendarContract.Instances.BEGIN} ASC"
-            )
+            ) ?: return null
 
-            cursor?.use {
+            cursor.use {
                 val idIdx = it.getColumnIndexOrThrow(CalendarContract.Instances._ID)
                 val eventIdIdx = it.getColumnIndexOrThrow(CalendarContract.Instances.EVENT_ID)
                 val titleIdx = it.getColumnIndexOrThrow(CalendarContract.Instances.TITLE)
@@ -153,8 +155,10 @@ object CalendarReader {
             }
         } catch (e: SecurityException) {
             // Permissão READ_CALENDAR ausente
+            return null
         } catch (e: Exception) {
             e.printStackTrace()
+            return null
         }
 
         return occurrences.sortedBy { it.alarmTime }

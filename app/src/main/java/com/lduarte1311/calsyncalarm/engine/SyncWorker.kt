@@ -23,8 +23,8 @@ class SyncWorker(
         val activeCalendars = settings.getCalendars().filter { it.enabled }
 
         if (activeCalendars.isNotEmpty()) {
-            AlarmScheduler.scheduleNextAlarm(applicationContext)
-            settings.lastSyncTime = System.currentTimeMillis()
+            val readOk = AlarmScheduler.scheduleNextAlarm(applicationContext)
+            if (readOk) settings.lastSyncTime = System.currentTimeMillis()
         }
 
         return Result.success()

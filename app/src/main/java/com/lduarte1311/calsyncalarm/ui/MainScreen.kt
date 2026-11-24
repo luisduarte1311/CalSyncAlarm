@@ -135,7 +135,7 @@ fun MainScreen(
                     disabledKeys = cal.disabledKeys,
                     now = now
                 )
-                counts[cal.id] = occs.count { it.isEnabled }
+                counts[cal.id] = occs?.count { it.isEnabled } ?: 0
             } else {
                 counts[cal.id] = 0
             }
@@ -143,9 +143,11 @@ fun MainScreen(
         calendarCounts = counts
 
         nextUpcomingAlarm = AlarmScheduler.getNextUpcomingAlarm(context, now)
-        settings.lastSyncTime = now
-        lastSyncTime = now
-        AlarmScheduler.scheduleNextAlarm(context)
+        val readOk = AlarmScheduler.scheduleNextAlarm(context)
+        if (readOk) {
+            settings.lastSyncTime = now
+            lastSyncTime = now
+        }
     }
 
     LaunchedEffect(refreshTrigger) {

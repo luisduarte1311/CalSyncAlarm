@@ -24,11 +24,13 @@ object NotificationHelper {
     const val CHANNEL_PRE_ALARM_ID = "channel_calsyncalarm_pre_alarm"
     const val CHANNEL_SNOOZE_ID = "channel_calsyncalarm_snooze"
     const val CHANNEL_MISSED_ID = "channel_calsyncalarm_missed"
+    const val CHANNEL_WARNING_ID = "channel_calsyncalarm_warning"
 
     const val NOTIFICATION_ALARM_ID = 1001
     const val NOTIFICATION_PRE_ALARM_ID = 1002
     const val NOTIFICATION_SNOOZE_ID = 1003
     const val NOTIFICATION_MISSED_ID = 1004
+    const val NOTIFICATION_READ_ERROR_ID = 1005
 
     /**
      * Regista todos os canais de notificação necessários no NotificationManager.
@@ -78,7 +80,18 @@ object NotificationHelper {
                 description = "Aviso quando um alarme atingiu o limite de segurança de 10 minutos"
             }
 
-            manager.createNotificationChannels(listOf(alarmChannel, preAlarmChannel, snoozeChannel, missedChannel))
+            // Canal 5: Avisos da app (ex.: falha a ler o calendário)
+            val warningChannel = NotificationChannel(
+                CHANNEL_WARNING_ID,
+                "Avisos da App",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "Avisos quando a app não consegue ler o calendário"
+            }
+
+            manager.createNotificationChannels(
+                listOf(alarmChannel, preAlarmChannel, snoozeChannel, missedChannel, warningChannel)
+            )
         }
     }
 
@@ -262,5 +275,39 @@ object NotificationHelper {
             .build()
 
         manager.notify(NOTIFICATION_MISSED_ID, notification)
+    }
+
+    /**
+     * Avisa que o calendário não pôde ser lido e que os alarmes já agendados foram mantidos.
+     */
+    fun showCalendarReadErrorNotification(context: Context) {
+        createChannels(context)
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val openAppPendingIntent = PendingIntent.getActivity(
+            context,
+            7,
+            Intent(context, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_WARNING_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("Não foi possível ler o calendário")
+            .setContentText("Os alarmes já agendados foram mantidos. Verifica a permissão de calendário.")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setOnlyAlertOnce(true)
+            .setAutoCancel(true)
+            .setContentIntent(openAppPendingIntent)
+            .build()
+
+        manager.notify(NOTIFICATION_READ_ERROR_ID, notification)
+    }
+
+    /**
+     * Retira o aviso de falha de leitura quando a leitura volta a funcionar.
+     */
+    fun cancelCalendarReadErrorNotification(context: Context) {
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.cancel(NOTIFICATION_READ_ERROR_ID)
     }
 }

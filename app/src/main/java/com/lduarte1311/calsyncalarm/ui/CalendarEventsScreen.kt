@@ -89,7 +89,7 @@ fun CalendarEventsScreen(
                 offsetMinutes = cal.offsetMinutes,
                 disabledKeys = cal.disabledKeys,
                 now = now
-            )
+            ) ?: emptyList()
         }
     }
 
