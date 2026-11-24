@@ -1,7 +1,7 @@
-# Projeto: Calendar Wake
+# Projeto: CalSyncAlarm
 
 - Autor: Luís Duarte (incluir crédito discreto de autoria no primeiro arranque / ecrã Sobre).
-- ApplicationId: `com.luisduarte.calendarwake`
+- ApplicationId e pacote: `com.lduarte1311.calsyncalarm`
 - Idioma da UI e comentários no código: Português de Portugal (PT-PT), claro e didático.
 
 ## Diretivas de Engenharia (Obrigatórias)

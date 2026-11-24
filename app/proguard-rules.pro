@@ -1,1 +1,1 @@
-# Proguard rules for Calendar Wake
+# Proguard rules for CalSyncAlarm

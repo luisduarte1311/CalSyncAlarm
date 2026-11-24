@@ -12,7 +12,7 @@ data class CalendarAccount(
 )
 
 /**
- * Configuração isolada de um calendário associado no Calendar Wake.
+ * Configuração isolada de um calendário associado no CalSyncAlarm.
  */
 data class CalendarConfig(
     val id: Long,
