@@ -3,6 +3,7 @@ package com.lduarte1311.calsyncalarm.engine
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.lduarte1311.calsyncalarm.data.AppSettings
 import com.lduarte1311.calsyncalarm.data.SnoozeInfo
@@ -60,7 +61,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 try {
                     AlarmScheduler.scheduleNextAlarm(context)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e("CalSyncAlarm", "Erro em onReceive", e)
                 }
             }
 

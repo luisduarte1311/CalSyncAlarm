@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.lduarte1311.calsyncalarm.data.AlarmOccurrence
 import com.lduarte1311.calsyncalarm.data.AppSettings
 import com.lduarte1311.calsyncalarm.data.CalendarReader
@@ -186,7 +187,7 @@ object AlarmScheduler {
                 alarmPendingIntent
             )
         } catch (e: SecurityException) {
-            e.printStackTrace()
+            Log.e("CalSyncAlarm", "Erro em scheduleNextAlarm", e)
         }
 
         // 2. Agendar a notificação pré-alarme se configurada para o calendário do evento
@@ -225,7 +226,7 @@ object AlarmScheduler {
                         preAlarmPendingIntent
                     )
                 } catch (e: SecurityException) {
-                    e.printStackTrace()
+                    Log.e("CalSyncAlarm", "Erro em scheduleNextAlarm", e)
                 }
             } else if (now < nextTarget.triggerTime && !alreadyShown) {
                 // Já dentro da janela de pré-alarme e ainda não avisado para este alarme

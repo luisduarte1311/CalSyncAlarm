@@ -17,6 +17,7 @@ import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.util.Log
 import androidx.core.app.ServiceCompat
 import com.lduarte1311.calsyncalarm.data.AppSettings
 import kotlin.math.roundToInt
@@ -104,7 +105,7 @@ class AlarmService : Service() {
                 foregroundType
             )
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("CalSyncAlarm", "Erro em onStartCommand", e)
         }
 
         // 2. Override temporário de volume para STREAM_ALARM com a percentagem isolada do calendário
@@ -144,7 +145,7 @@ class AlarmService : Service() {
 
             audioManager.setStreamVolume(AudioManager.STREAM_ALARM, targetVol, 0)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("CalSyncAlarm", "Erro em applyVolumeOverride", e)
         }
     }
 
@@ -154,7 +155,7 @@ class AlarmService : Service() {
             try {
                 audioManager.setStreamVolume(AudioManager.STREAM_ALARM, savedVol, 0)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("CalSyncAlarm", "Erro em restoreVolume", e)
             }
         }
         originalVolume = null
@@ -184,7 +185,7 @@ class AlarmService : Service() {
                 start()
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("CalSyncAlarm", "Erro em playAlarmSound", e)
             try {
                 val fallbackUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
                 mediaPlayer = MediaPlayer.create(applicationContext, fallbackUri)?.apply {
@@ -192,7 +193,7 @@ class AlarmService : Service() {
                     start()
                 }
             } catch (fallbackEx: Exception) {
-                fallbackEx.printStackTrace()
+                Log.e("CalSyncAlarm", "Erro em playAlarmSound", fallbackEx)
             }
         }
     }
@@ -215,7 +216,7 @@ class AlarmService : Service() {
                 vibrator?.vibrate(pattern, 0)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("CalSyncAlarm", "Erro em startVibration", e)
         }
     }
 
@@ -228,14 +229,14 @@ class AlarmService : Service() {
             mediaPlayer?.release()
             mediaPlayer = null
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("CalSyncAlarm", "Erro em onDestroy", e)
         }
 
         try {
             vibrator?.cancel()
             vibrator = null
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("CalSyncAlarm", "Erro em onDestroy", e)
         }
 
         restoreVolume()
@@ -245,7 +246,7 @@ class AlarmService : Service() {
                 wakeLock?.release()
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("CalSyncAlarm", "Erro em onDestroy", e)
         }
     }
 }

@@ -2,6 +2,7 @@ package com.lduarte1311.calsyncalarm.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -101,7 +102,7 @@ class AppSettings(context: Context) {
                 try {
                     list.add(parseCalendar(array.getJSONObject(i)))
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e("CalSyncAlarm", "Erro em getCalendars", e)
                 }
             }
             list

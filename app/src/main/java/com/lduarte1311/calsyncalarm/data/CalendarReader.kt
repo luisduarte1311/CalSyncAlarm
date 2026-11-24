@@ -4,6 +4,7 @@ import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
 import android.provider.CalendarContract
+import android.util.Log
 
 /**
  * Utilitário para leitura do CalendarContract do Android.
@@ -53,7 +54,7 @@ object CalendarReader {
         } catch (e: SecurityException) {
             // Permissão READ_CALENDAR ainda não concedida
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("CalSyncAlarm", "Erro em getAvailableCalendars", e)
         }
 
         return list
@@ -157,7 +158,7 @@ object CalendarReader {
             // Permissão READ_CALENDAR ausente
             return null
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("CalSyncAlarm", "Erro em loadUpcomingOccurrences", e)
             return null
         }
 
