@@ -55,6 +55,13 @@ class AlarmReceiver : BroadcastReceiver() {
                     putExtra(AlarmService.EXTRA_TITLE, title)
                 }
                 ContextCompat.startForegroundService(context, serviceIntent)
+
+                // Agendar já o alarme seguinte, para a cadeia não depender de desligar/adiar/timeout
+                try {
+                    AlarmScheduler.scheduleNextAlarm(context)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
 
             ACTION_PRE_ALARM -> {
