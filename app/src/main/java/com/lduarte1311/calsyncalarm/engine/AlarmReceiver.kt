@@ -13,13 +13,13 @@ import com.lduarte1311.calsyncalarm.data.SnoozeInfo
 class AlarmReceiver : BroadcastReceiver() {
 
     companion object {
-        const val ACTION_TRIGGER_ALARM = "com.luisduarte.calsyncalarm.ACTION_TRIGGER_ALARM"
-        const val ACTION_PRE_ALARM = "com.luisduarte.calsyncalarm.ACTION_PRE_ALARM"
-        const val ACTION_SKIP_ALARM = "com.luisduarte.calsyncalarm.ACTION_SKIP_ALARM"
-        const val ACTION_DISMISS_SNOOZE = "com.luisduarte.calsyncalarm.ACTION_DISMISS_SNOOZE"
-        const val ACTION_DISMISS_ALARM = "com.luisduarte.calsyncalarm.ACTION_DISMISS_ALARM"
-        const val ACTION_SNOOZE_ALARM = "com.luisduarte.calsyncalarm.ACTION_SNOOZE_ALARM"
-        const val ACTION_TEST_ALARM = "com.luisduarte.calsyncalarm.ACTION_TEST_ALARM"
+        const val ACTION_TRIGGER_ALARM = "com.lduarte1311.calsyncalarm.ACTION_TRIGGER_ALARM"
+        const val ACTION_PRE_ALARM = "com.lduarte1311.calsyncalarm.ACTION_PRE_ALARM"
+        const val ACTION_SKIP_ALARM = "com.lduarte1311.calsyncalarm.ACTION_SKIP_ALARM"
+        const val ACTION_DISMISS_SNOOZE = "com.lduarte1311.calsyncalarm.ACTION_DISMISS_SNOOZE"
+        const val ACTION_DISMISS_ALARM = "com.lduarte1311.calsyncalarm.ACTION_DISMISS_ALARM"
+        const val ACTION_SNOOZE_ALARM = "com.lduarte1311.calsyncalarm.ACTION_SNOOZE_ALARM"
+        const val ACTION_TEST_ALARM = "com.lduarte1311.calsyncalarm.ACTION_TEST_ALARM"
 
         const val EXTRA_CALENDAR_ID = "extra_calendar_id"
         const val EXTRA_EVENT_ID = "extra_event_id"

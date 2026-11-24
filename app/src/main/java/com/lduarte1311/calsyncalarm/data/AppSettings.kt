@@ -14,7 +14,7 @@ class AppSettings(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     companion object {
-        private const val PREFS_NAME = "calendar_wake_prefs"
+        private const val PREFS_NAME = "calsyncalarm_prefs"
 
         // Chaves das Definições Globais (Valores padrão para novos calendários)
         private const val KEY_DEFAULT_OFFSET_MINUTES = "default_offset_minutes"

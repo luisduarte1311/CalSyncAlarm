@@ -31,7 +31,7 @@ class SyncWorker(
     }
 
     companion object {
-        private const val WORK_NAME = "CalendarWake_PeriodicSync"
+        private const val WORK_NAME = "CalSyncAlarm_PeriodicSync"
 
         /**
          * Enfileira a tarefa periódica no WorkManager (reforço a cada 6 horas).

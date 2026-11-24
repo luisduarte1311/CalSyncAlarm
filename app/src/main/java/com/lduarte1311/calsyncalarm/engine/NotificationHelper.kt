@@ -20,10 +20,10 @@ import java.util.Locale
  */
 object NotificationHelper {
 
-    const val CHANNEL_ALARM_ID = "channel_calendar_wake_alarm"
-    const val CHANNEL_PRE_ALARM_ID = "channel_calendar_wake_pre_alarm"
-    const val CHANNEL_SNOOZE_ID = "channel_calendar_wake_snooze"
-    const val CHANNEL_MISSED_ID = "channel_calendar_wake_missed"
+    const val CHANNEL_ALARM_ID = "channel_calsyncalarm_alarm"
+    const val CHANNEL_PRE_ALARM_ID = "channel_calsyncalarm_pre_alarm"
+    const val CHANNEL_SNOOZE_ID = "channel_calsyncalarm_snooze"
+    const val CHANNEL_MISSED_ID = "channel_calsyncalarm_missed"
 
     const val NOTIFICATION_ALARM_ID = 1001
     const val NOTIFICATION_PRE_ALARM_ID = 1002
