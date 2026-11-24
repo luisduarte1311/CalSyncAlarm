@@ -64,7 +64,7 @@
         <!-- Receiver para reagendamento após reinício ou alteração de hora -->
         <receiver
             android:name=".engine.InitReceiver"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.TIME_SET" />
