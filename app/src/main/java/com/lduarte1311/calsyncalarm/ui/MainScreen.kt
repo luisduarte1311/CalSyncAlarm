@@ -536,7 +536,7 @@ fun MainScreen(
                                     else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                                 )
                                 Text(
-                                    text = "${cal.accountName} (${cal.accountType})",
+                                    text = cal.accountName,
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -663,7 +663,7 @@ fun MainScreen(
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = "${cal.accountName} (${cal.accountType})",
+                                                text = cal.accountName,
                                                 style = MaterialTheme.typography.bodySmall,
                                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
