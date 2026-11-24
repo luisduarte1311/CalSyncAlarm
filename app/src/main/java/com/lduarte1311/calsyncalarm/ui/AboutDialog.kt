@@ -34,14 +34,15 @@ fun AboutDialog(onDismiss: () -> Unit) {
         } catch (_: Exception) {
             null
         } ?: "?"
-        val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:calsyncalarm.contact@gmail.com")).apply {
-            putExtra(Intent.EXTRA_SUBJECT, "CalSyncAlarm v$versao – problema")
-            putExtra(
-                Intent.EXTRA_TEXT,
-                "Descreve o problema:\n\n\n---\nVersão: $versao\n" +
-                    "Telemóvel: ${Build.MANUFACTURER} ${Build.MODEL}\nAndroid: ${Build.VERSION.RELEASE}"
-            )
-        }
+        val assunto = "CalSyncAlarm v$versao – problema"
+        val corpo = "Descreve o problema:\n\n\n---\nVersão: $versao\n" +
+            "Telemóvel: ${Build.MANUFACTURER} ${Build.MODEL}\nAndroid: ${Build.VERSION.RELEASE}"
+        // Assunto e corpo vão dentro do próprio mailto: (alguns clientes ignoram os extras do Intent)
+        val uri = Uri.parse(
+            "mailto:calsyncalarm.contact@gmail.com" +
+                "?subject=${Uri.encode(assunto)}&body=${Uri.encode(corpo)}"
+        )
+        val intent = Intent(Intent.ACTION_SENDTO, uri)
         try {
             context.startActivity(intent)
         } catch (_: Exception) { }
