@@ -129,7 +129,7 @@ class AlarmService : Service() {
         // Renovar o wake lock para acompanhar o novo timeout (não acumula: não é contado por referências)
         wakeLock?.acquire(TIMEOUT_MILLIS + 10_000L)
 
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     private fun applyVolumeOverride(volumePercent: Int) {
