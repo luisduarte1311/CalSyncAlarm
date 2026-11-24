@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.ui
+package com.lduarte1311.calsyncalarm.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,10 +46,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lduarte1311.calendarwake.data.AlarmOccurrence
-import com.lduarte1311.calendarwake.data.AppSettings
-import com.lduarte1311.calendarwake.data.CalendarReader
-import com.lduarte1311.calendarwake.engine.AlarmScheduler
+import com.lduarte1311.calsyncalarm.data.AlarmOccurrence
+import com.lduarte1311.calsyncalarm.data.AppSettings
+import com.lduarte1311.calsyncalarm.data.CalendarReader
+import com.lduarte1311.calsyncalarm.engine.AlarmScheduler
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

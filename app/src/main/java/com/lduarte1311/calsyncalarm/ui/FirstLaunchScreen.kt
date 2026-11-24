@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.ui
+package com.lduarte1311.calsyncalarm.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -47,11 +47,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.lduarte1311.calendarwake.data.AppSettings
-import com.lduarte1311.calendarwake.data.CalendarAccount
-import com.lduarte1311.calendarwake.data.CalendarConfig
-import com.lduarte1311.calendarwake.data.CalendarReader
-import com.lduarte1311.calendarwake.engine.AlarmScheduler
+import com.lduarte1311.calsyncalarm.data.AppSettings
+import com.lduarte1311.calsyncalarm.data.CalendarAccount
+import com.lduarte1311.calsyncalarm.data.CalendarConfig
+import com.lduarte1311.calsyncalarm.data.CalendarReader
+import com.lduarte1311.calsyncalarm.engine.AlarmScheduler
 
 /**
  * Ecrã de primeiro arranque simples e limpo, sem carrosséis.

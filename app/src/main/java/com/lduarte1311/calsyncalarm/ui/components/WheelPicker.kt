@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.ui.components
+package com.lduarte1311.calsyncalarm.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

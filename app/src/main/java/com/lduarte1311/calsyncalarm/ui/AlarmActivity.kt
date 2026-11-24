@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.ui
+package com.lduarte1311.calsyncalarm.ui
 
 import android.app.KeyguardManager
 import android.content.Context
@@ -40,9 +40,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lduarte1311.calendarwake.data.AppSettings
-import com.lduarte1311.calendarwake.engine.AlarmReceiver
-import com.lduarte1311.calendarwake.ui.theme.CalendarWakeTheme
+import com.lduarte1311.calsyncalarm.data.AppSettings
+import com.lduarte1311.calsyncalarm.engine.AlarmReceiver
+import com.lduarte1311.calsyncalarm.ui.theme.CalendarWakeTheme
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date

@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.engine
+package com.lduarte1311.calsyncalarm.engine
 
 import android.content.Context
 import androidx.work.Constraints
@@ -7,7 +7,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.lduarte1311.calendarwake.data.AppSettings
+import com.lduarte1311.calsyncalarm.data.AppSettings
 import java.util.concurrent.TimeUnit
 
 /**

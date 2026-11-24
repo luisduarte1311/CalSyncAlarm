@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.engine
+package com.lduarte1311.calsyncalarm.engine
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -8,9 +8,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.lduarte1311.calendarwake.R
-import com.lduarte1311.calendarwake.ui.AlarmActivity
-import com.lduarte1311.calendarwake.ui.MainActivity
+import com.lduarte1311.calsyncalarm.R
+import com.lduarte1311.calsyncalarm.ui.AlarmActivity
+import com.lduarte1311.calsyncalarm.ui.MainActivity
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -137,7 +137,7 @@ object NotificationHelper {
         )
 
         return NotificationCompat.Builder(context, CHANNEL_ALARM_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Alarme: $title")
             .setContentText("Evento marcado para as $eventHour")
             .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -179,7 +179,7 @@ object NotificationHelper {
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_SNOOZE_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Em Snooze — $title")
             .setContentText("Toca novamente às $wakeHour")
             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -229,7 +229,7 @@ object NotificationHelper {
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_PRE_ALARM_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Próximo alarme às $alarmHour")
             .setContentText(title)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -254,7 +254,7 @@ object NotificationHelper {
     fun showMissedAlarmNotification(context: Context, title: String) {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notification = NotificationCompat.Builder(context, CHANNEL_MISSED_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Alarme perdido")
             .setContentText("O alarme para \"$title\" tocou durante 10 minutos sem resposta.")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

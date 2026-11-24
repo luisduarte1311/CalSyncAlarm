@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.lduarte1311.calendarwake"
+    namespace = "com.lduarte1311.calsyncalarm"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.luisduarte.calendarwake"
+        applicationId = "com.lduarte1311.calsyncalarm"
         minSdk = 26
         targetSdk = 36
         versionCode = 3

@@ -1,65 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2026 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
-
-    <!-- Topos das argolas do calendário (Branco nítido, perfeitamente centrados) -->
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="#FFFFFF">
+  <group android:scaleX="0.464"
+      android:scaleY="0.464"
+      android:translateX="6.432"
+      android:translateY="6.432">
     <path
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="3.2"
-        android:strokeLineCap="round"
-        android:pathData="M 39,28 L 39,35 M 69,28 L 69,35" />
-
-    <!-- Barra superior do calendário (Verde esmeralda / menta vibrante) -->
+        android:fillColor="@android:color/white"
+        android:pathData="M20,3h-1L19,1h-2v2L7,3L7,1L5,1v2L4,3c-1.1,0 -2,0.9 -2,2v16c0,1.1 0.9,2 2,2h16c1.1,0 2,-0.9 2,-2L22,5c0,-1.1 -0.9,-2 -2,-2zM20,5v3L4,8L4,5h16zM4,21L4,10h16v11L4,21z"/>
     <path
-        android:fillColor="#10B981"
-        android:pathData="M 36,33 L 72,33 A 6,6 0 0,1 78,39 L 78,44 L 30,44 L 30,39 A 6,6 0 0,1 36,33 Z" />
-
-    <!-- Contorno do corpo do calendário (Branco nítido) -->
-    <path
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="2.8"
-        android:strokeLineJoin="round"
-        android:pathData="M 30,44 L 78,44 L 78,67 A 6,6 0 0,1 72,73 L 36,73 A 6,6 0 0,1 30,67 Z" />
-
-    <!-- Corpo do Despertador no centro (Branco nítido) -->
-    <path
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="2.6"
-        android:pathData="M 54,48.5 A 10.5,10.5 0 1,1 53.9,48.5 Z" />
-
-    <!-- Campainhas do Despertador (Branco nítido) -->
-    <path
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="2.2"
-        android:strokeLineCap="round"
-        android:pathData="M 44.5,49 C 43,47.5 43.5,45.5 45.5,44.5 C 47,43.8 49,45 49.5,46.5" />
-    <path
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="2.2"
-        android:strokeLineCap="round"
-        android:pathData="M 63.5,49 C 65,47.5 64.5,45.5 62.5,44.5 C 61,43.8 59,45 58.5,46.5" />
-
-    <!-- Pés do Despertador (Branco nítido) -->
-    <path
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="2.4"
-        android:strokeLineCap="round"
-        android:pathData="M 46,67.5 L 42.5,71.5 M 62,67.5 L 65.5,71.5" />
-
-    <!-- Ponteiros das horas e minutos (Verde esmeralda / menta vibrante) -->
-    <path
-        android:strokeColor="#10B981"
-        android:strokeWidth="2.2"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:pathData="M 54,53.5 L 54,59 L 58.5,59" />
-
-    <!-- Ponto central dos ponteiros -->
-    <path
-        android:fillColor="#10B981"
-        android:pathData="M 54,58.2 A 1,1 0 1,1 53.9,58.2 Z" />
+        android:fillColor="@android:color/white"
+        android:pathData="M4,5.01h16V8H4z"
+        android:strokeAlpha="0.3"
+        android:fillAlpha="0.3"/>
+  </group>
+  <group android:scaleX="0.2"
+      android:scaleY="0.2"
+      android:translateX="9.6"
+      android:translateY="11.2">
+    <path android:fillColor="@android:color/white" android:pathData="M7.88,3.39L6.6,1.86 2,5.71l1.29,1.53 4.59,-3.85zM22,5.72l-4.6,-3.86 -1.29,1.53 4.6,3.86L22,5.72zM12,4c-4.97,0 -9,4.03 -9,9s4.02,9 9,9c4.97,0 9,-4.03 9,-9s-4.03,-9 -9,-9zM12,20c-3.87,0 -7,-3.13 -7,-7s3.13,-7 7,-7 7,3.13 7,7 -3.13,7 -7,7zM13,9h-2v3L8,12v2h3v3h2v-3h3v-2h-3L13,9z"/>
+  </group>
 
 </vector>

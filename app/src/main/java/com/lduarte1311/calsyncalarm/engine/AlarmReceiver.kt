@@ -1,11 +1,11 @@
-package com.lduarte1311.calendarwake.engine
+package com.lduarte1311.calsyncalarm.engine
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
-import com.lduarte1311.calendarwake.data.AppSettings
-import com.lduarte1311.calendarwake.data.SnoozeInfo
+import com.lduarte1311.calsyncalarm.data.AppSettings
+import com.lduarte1311.calsyncalarm.data.SnoozeInfo
 
 /**
  * Receptor de mensagens de broadcast para disparos de alarmes e ações de utilizador nas notificações.
@@ -13,13 +13,13 @@ import com.lduarte1311.calendarwake.data.SnoozeInfo
 class AlarmReceiver : BroadcastReceiver() {
 
     companion object {
-        const val ACTION_TRIGGER_ALARM = "com.luisduarte.calendarwake.ACTION_TRIGGER_ALARM"
-        const val ACTION_PRE_ALARM = "com.luisduarte.calendarwake.ACTION_PRE_ALARM"
-        const val ACTION_SKIP_ALARM = "com.luisduarte.calendarwake.ACTION_SKIP_ALARM"
-        const val ACTION_DISMISS_SNOOZE = "com.luisduarte.calendarwake.ACTION_DISMISS_SNOOZE"
-        const val ACTION_DISMISS_ALARM = "com.luisduarte.calendarwake.ACTION_DISMISS_ALARM"
-        const val ACTION_SNOOZE_ALARM = "com.luisduarte.calendarwake.ACTION_SNOOZE_ALARM"
-        const val ACTION_TEST_ALARM = "com.luisduarte.calendarwake.ACTION_TEST_ALARM"
+        const val ACTION_TRIGGER_ALARM = "com.luisduarte.calsyncalarm.ACTION_TRIGGER_ALARM"
+        const val ACTION_PRE_ALARM = "com.luisduarte.calsyncalarm.ACTION_PRE_ALARM"
+        const val ACTION_SKIP_ALARM = "com.luisduarte.calsyncalarm.ACTION_SKIP_ALARM"
+        const val ACTION_DISMISS_SNOOZE = "com.luisduarte.calsyncalarm.ACTION_DISMISS_SNOOZE"
+        const val ACTION_DISMISS_ALARM = "com.luisduarte.calsyncalarm.ACTION_DISMISS_ALARM"
+        const val ACTION_SNOOZE_ALARM = "com.luisduarte.calsyncalarm.ACTION_SNOOZE_ALARM"
+        const val ACTION_TEST_ALARM = "com.luisduarte.calsyncalarm.ACTION_TEST_ALARM"
 
         const val EXTRA_CALENDAR_ID = "extra_calendar_id"
         const val EXTRA_EVENT_ID = "extra_event_id"

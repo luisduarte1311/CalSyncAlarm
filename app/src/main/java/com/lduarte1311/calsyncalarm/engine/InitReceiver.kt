@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.engine
+package com.lduarte1311.calsyncalarm.engine
 
 import android.content.BroadcastReceiver
 import android.content.Context

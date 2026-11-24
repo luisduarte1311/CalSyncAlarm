@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.ui
+package com.lduarte1311.calsyncalarm.ui
 
 import android.Manifest
 import android.content.Intent
@@ -62,15 +62,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import com.lduarte1311.calendarwake.data.AlarmOccurrence
-import com.lduarte1311.calendarwake.data.AppSettings
-import com.lduarte1311.calendarwake.data.CalendarAccount
-import com.lduarte1311.calendarwake.data.CalendarConfig
-import com.lduarte1311.calendarwake.data.CalendarReader
-import com.lduarte1311.calendarwake.engine.AlarmReceiver
-import com.lduarte1311.calendarwake.engine.AlarmScheduler
-import com.lduarte1311.calendarwake.engine.NotificationHelper
-import com.lduarte1311.calendarwake.ui.components.PermissionBanner
+import com.lduarte1311.calsyncalarm.data.AlarmOccurrence
+import com.lduarte1311.calsyncalarm.data.AppSettings
+import com.lduarte1311.calsyncalarm.data.CalendarAccount
+import com.lduarte1311.calsyncalarm.data.CalendarConfig
+import com.lduarte1311.calsyncalarm.data.CalendarReader
+import com.lduarte1311.calsyncalarm.engine.AlarmReceiver
+import com.lduarte1311.calsyncalarm.engine.AlarmScheduler
+import com.lduarte1311.calsyncalarm.engine.NotificationHelper
+import com.lduarte1311.calsyncalarm.ui.components.PermissionBanner
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

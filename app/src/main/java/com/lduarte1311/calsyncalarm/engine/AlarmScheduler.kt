@@ -1,13 +1,13 @@
-package com.lduarte1311.calendarwake.engine
+package com.lduarte1311.calsyncalarm.engine
 
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.lduarte1311.calendarwake.data.AlarmOccurrence
-import com.lduarte1311.calendarwake.data.AppSettings
-import com.lduarte1311.calendarwake.data.CalendarReader
-import com.lduarte1311.calendarwake.ui.MainActivity
+import com.lduarte1311.calsyncalarm.data.AlarmOccurrence
+import com.lduarte1311.calsyncalarm.data.AppSettings
+import com.lduarte1311.calsyncalarm.data.CalendarReader
+import com.lduarte1311.calsyncalarm.ui.MainActivity
 
 /**
  * Motor central de agendamento multi-calendário.

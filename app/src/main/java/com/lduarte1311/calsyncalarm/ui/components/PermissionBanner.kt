@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.ui.components
+package com.lduarte1311.calsyncalarm.ui.components
 
 import android.Manifest
 import android.app.AlarmManager
@@ -30,15 +30,24 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 
 /**
  * Semáforo inteligente de permissões.
  * Só é visível se faltar alguma permissão essencial ao funcionamento dos alarmes.
+ * Atualiza-se automaticamente quando a app regressa do background (onResume).
  */
 @Composable
 fun PermissionBanner(
@@ -46,50 +55,74 @@ fun PermissionBanner(
     onPermissionChanged: () -> Unit
 ) {
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    // 1. Permissão de leitura de calendário
-    val hasCalendar = ContextCompat.checkSelfPermission(
-        context,
-        Manifest.permission.READ_CALENDAR
-    ) == PackageManager.PERMISSION_GRANTED
+    // Estados locais para forçar reavaliação imediata
+    var hasCalendar by remember { mutableStateOf(false) }
+    var hasNotification by remember { mutableStateOf(false) }
+    var hasExactAlarm by remember { mutableStateOf(false) }
+    var hasFullScreenIntent by remember { mutableStateOf(false) }
+    var isBatteryOptimized by remember { mutableStateOf(false) }
 
-    // 2. Permissão de notificações (Android 13+)
-    val hasNotification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        ContextCompat.checkSelfPermission(
+    // Função para recalcular todas as permissões
+    val checkAllPermissions = {
+        hasCalendar = ContextCompat.checkSelfPermission(
             context,
-            Manifest.permission.POST_NOTIFICATIONS
+            Manifest.permission.READ_CALENDAR
         ) == PackageManager.PERMISSION_GRANTED
-    } else true
 
-    // 3. Permissão de alarmes exatos (Android 12+)
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val hasExactAlarm = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        alarmManager.canScheduleExactAlarms()
-    } else true
+        hasNotification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        } else true
 
-    // 4. Permissão de intents de ecrã total (Android 14+)
-    val notifManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    val hasFullScreenIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-        notifManager.canUseFullScreenIntent()
-    } else true
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        hasExactAlarm = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            alarmManager.canScheduleExactAlarms()
+        } else true
 
-    // 5. Otimização de bateria sem restrições
-    val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-    val isBatteryOptimized = !powerManager.isIgnoringBatteryOptimizations(context.packageName)
+        val notifManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        hasFullScreenIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            notifManager.canUseFullScreenIntent()
+        } else true
+
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        isBatteryOptimized = !powerManager.isIgnoringBatteryOptimizations(context.packageName)
+    }
+
+    // Executa a verificação sempre que o ecrã ganha foco (ex: volta das Definições)
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                checkAllPermissions()
+                onPermissionChanged()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        checkAllPermissions() // Verificação inicial
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     val requestPermissionsLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
     ) {
+        checkAllPermissions()
         onPermissionChanged()
     }
 
-    // Se estiver tudo autorizado e a bateria não tiver restrições, o banner não é mostrado
     val missingCalendar = !hasCalendar
     val missingNotification = !hasNotification
     val missingExactAlarm = !hasExactAlarm
     val missingFullScreen = !hasFullScreenIntent
+    val missingBattery = isBatteryOptimized
 
-    if (!missingCalendar && !missingNotification && !missingExactAlarm && !missingFullScreen && !isBatteryOptimized) {
+    // Se estiver tudo autorizado, o banner não é mostrado
+    if (!missingCalendar && !missingNotification && !missingExactAlarm && !missingFullScreen && !missingBattery) {
         return
     }
 
@@ -206,7 +239,7 @@ fun PermissionBanner(
                     }
                 }
 
-                isBatteryOptimized -> {
+                missingBattery -> {
                     Text(
                         text = "Dica: Para garantir que o telemóvel acorda a horas, defina a bateria para 'Sem restrições'.",
                         style = MaterialTheme.typography.bodyMedium,

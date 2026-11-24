@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.ui
+package com.lduarte1311.calsyncalarm.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.lduarte1311.calendarwake.data.AppSettings
-import com.lduarte1311.calendarwake.engine.AlarmScheduler
-import com.lduarte1311.calendarwake.engine.NotificationHelper
-import com.lduarte1311.calendarwake.engine.SyncWorker
-import com.lduarte1311.calendarwake.ui.theme.CalendarWakeTheme
+import com.lduarte1311.calsyncalarm.data.AppSettings
+import com.lduarte1311.calsyncalarm.engine.AlarmScheduler
+import com.lduarte1311.calsyncalarm.engine.NotificationHelper
+import com.lduarte1311.calsyncalarm.engine.SyncWorker
+import com.lduarte1311.calsyncalarm.ui.theme.CalendarWakeTheme
 
 /**
  * Ponto de entrada da aplicação.

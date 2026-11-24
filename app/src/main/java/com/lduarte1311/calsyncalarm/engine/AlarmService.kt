@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.engine
+package com.lduarte1311.calsyncalarm.engine
 
 import android.app.Service
 import android.content.Context
@@ -18,7 +18,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import androidx.core.app.ServiceCompat
-import com.lduarte1311.calendarwake.data.AppSettings
+import com.lduarte1311.calsyncalarm.data.AppSettings
 import kotlin.math.roundToInt
 
 /**

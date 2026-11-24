@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.data
+package com.lduarte1311.calsyncalarm.data
 
 import android.content.ContentUris
 import android.content.Context

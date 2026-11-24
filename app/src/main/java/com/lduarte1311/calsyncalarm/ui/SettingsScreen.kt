@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.ui
+package com.lduarte1311.calsyncalarm.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -59,11 +59,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.IntentCompat
-import com.lduarte1311.calendarwake.data.AppSettings
-import com.lduarte1311.calendarwake.data.CalendarConfig
-import com.lduarte1311.calendarwake.engine.AlarmScheduler
-import com.lduarte1311.calendarwake.ui.components.WheelPicker
+import com.lduarte1311.calsyncalarm.data.AppSettings
+import com.lduarte1311.calsyncalarm.data.CalendarConfig
+import com.lduarte1311.calsyncalarm.engine.AlarmScheduler
+import com.lduarte1311.calsyncalarm.ui.components.WheelPicker
 import kotlin.math.roundToInt
+import androidx.compose.foundation.BorderStroke
 
 /**
  * Ecrã de Definições limpo sem numeração.
@@ -404,42 +405,55 @@ fun SettingsScreen(
                 }
             }
 
-            // Rodapé com crédito de autoria discreto
+            // Cartão com crédito de autoria discreto
             item {
                 Spacer(modifier = Modifier.height(20.dp))
-                Column(
+                Card(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                    ),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
                 ) {
-                    Text(
-                        text = "Calendar Wake v1.3",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = "Desenvolvido por Luís Duarte",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                    )
-                    if (isGlobalMode) {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        TextButton(
-                            onClick = {
-                                try {
-                                    val intent = Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse("https://paypal.me/lduarte1311")
-                                    )
-                                    context.startActivity(intent)
-                                } catch (_: Exception) { }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Calendar Wake v1.3",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "Desenvolvido por Luís Duarte",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                        )
+
+                        if (isGlobalMode) {
+                            Spacer(modifier = Modifier.height(12.dp))
+                            TextButton(
+                                onClick = {
+                                    try {
+                                        val intent = Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse("https://paypal.me/lduarte1311")
+                                        )
+                                        context.startActivity(intent)
+                                    } catch (_: Exception) { }
+                                }
+                            ) {
+                                Text(
+                                    text = "☕ Ajudou-te a acordar? Paga-me um café.",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    textAlign = TextAlign.Center
+                                )
                             }
-                        ) {
-                            Text(
-                                text = "☕ Ajudou-te a acordar? Paga-me um café.",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                                textAlign = TextAlign.Center
-                            )
                         }
                     }
                 }

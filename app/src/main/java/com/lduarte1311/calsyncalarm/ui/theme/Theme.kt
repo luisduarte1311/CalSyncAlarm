@@ -1,4 +1,4 @@
-package com.lduarte1311.calendarwake.ui.theme
+package com.lduarte1311.calsyncalarm.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
