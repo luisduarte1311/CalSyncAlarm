@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.lduarte1311.calsyncalarm.R
+import com.lduarte1311.calsyncalarm.data.AppSettings
 import com.lduarte1311.calsyncalarm.ui.AlarmActivity
 import com.lduarte1311.calsyncalarm.ui.MainActivity
 import java.text.SimpleDateFormat
@@ -213,7 +214,14 @@ object NotificationHelper {
     }
 
     /**
-     * Exibe notificação pré-alarme com botão "Saltar este alarme".
+     * Chave única de um pré-alarme: evento, início do evento e hora do alarme.
+     * Se a hora do alarme mudar, a chave muda e o aviso pode voltar a aparecer uma vez.
+     */
+    fun preAlarmKey(eventId: Long, eventStartTime: Long, alarmTime: Long): String =
+        "${eventId}_${eventStartTime}_${alarmTime}"
+
+    /**
+     * Exibe notificação pré-alarme com botão "Saltar este alarme" e regista que já foi mostrada.
      */
     fun showPreAlarmNotification(
         context: Context,
@@ -223,6 +231,8 @@ object NotificationHelper {
         title: String,
         alarmTime: Long
     ) {
+        AppSettings(context).lastPreAlarmKey = preAlarmKey(eventId, eventStartTime, alarmTime)
+
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         val alarmHour = timeFormat.format(Date(alarmTime))
@@ -246,6 +256,7 @@ object NotificationHelper {
             .setContentTitle("Próximo alarme às $alarmHour")
             .setContentText(title)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setOnlyAlertOnce(true)
             .setAutoCancel(true)
             .addAction(android.R.drawable.ic_media_next, "Saltar este alarme", skipPendingIntent)
             .build()

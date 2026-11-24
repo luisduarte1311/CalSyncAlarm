@@ -192,6 +192,16 @@ object AlarmScheduler {
         // 2. Agendar a notificação pré-alarme se configurada para o calendário do evento
         if (!nextTarget.isSnooze && nextTarget.preAlarmMinutes > 0) {
             val preAlarmTime = nextTarget.triggerTime - (nextTarget.preAlarmMinutes * 60_000L)
+
+            // Se o último pré-alarme mostrado era de outro evento, o aviso ficou obsoleto
+            val currentKey = NotificationHelper.preAlarmKey(
+                nextTarget.eventId, nextTarget.eventStartTime, nextTarget.triggerTime
+            )
+            val alreadyShown = settings.lastPreAlarmKey == currentKey
+            if (!alreadyShown) {
+                NotificationHelper.cancelPreAlarmNotification(context)
+            }
+
             val preAlarmIntent = Intent(context, AlarmReceiver::class.java).apply {
                 action = AlarmReceiver.ACTION_PRE_ALARM
                 putExtra(AlarmReceiver.EXTRA_CALENDAR_ID, nextTarget.calendarId)
@@ -217,8 +227,8 @@ object AlarmScheduler {
                 } catch (e: SecurityException) {
                     e.printStackTrace()
                 }
-            } else if (now < nextTarget.triggerTime) {
-                // Já dentro da janela de pré-alarme
+            } else if (now < nextTarget.triggerTime && !alreadyShown) {
+                // Já dentro da janela de pré-alarme e ainda não avisado para este alarme
                 NotificationHelper.showPreAlarmNotification(
                     context = context,
                     calendarId = nextTarget.calendarId,
@@ -230,6 +240,7 @@ object AlarmScheduler {
             }
         } else {
             cancelPreAlarm(context)
+            NotificationHelper.cancelPreAlarmNotification(context)
         }
         return true
     }

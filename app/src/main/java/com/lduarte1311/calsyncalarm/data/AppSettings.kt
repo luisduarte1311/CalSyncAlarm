@@ -27,6 +27,7 @@ class AppSettings(context: Context) {
         private const val KEY_CALENDARS_JSON = "configured_calendars_json"
         private const val KEY_LAST_SYNC_TIME = "last_sync_time"
         private const val KEY_SNOOZE_JSON = "snooze_json"
+        private const val KEY_LAST_PRE_ALARM = "last_pre_alarm_key"
 
         // Chaves legadas da V1 para migração automática
         private const val LEGACY_KEY_CALENDAR_ID = "selected_calendar_id"
@@ -77,6 +78,11 @@ class AppSettings(context: Context) {
     var lastSyncTime: Long
         get() = prefs.getLong(KEY_LAST_SYNC_TIME, 0L)
         set(value) = prefs.edit().putLong(KEY_LAST_SYNC_TIME, value).apply()
+
+    /** Chave do último pré-alarme mostrado, para não o repetir (ver NotificationHelper.preAlarmKey). */
+    var lastPreAlarmKey: String?
+        get() = prefs.getString(KEY_LAST_PRE_ALARM, null)
+        set(value) = prefs.edit().putString(KEY_LAST_PRE_ALARM, value).apply()
 
     /* ---------------------------------------------------------
        Gestão de Múltiplos Calendários com Regras Isoladas
