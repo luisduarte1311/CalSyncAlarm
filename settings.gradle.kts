@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "CalendarWake"
+rootProject.name = "CalSyncAlarm"
 include(":app")

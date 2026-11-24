@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lduarte1311.calsyncalarm.data.AppSettings
 import com.lduarte1311.calsyncalarm.engine.AlarmReceiver
-import com.lduarte1311.calsyncalarm.ui.theme.CalendarWakeTheme
+import com.lduarte1311.calsyncalarm.ui.theme.CalSyncAlarmTheme
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -89,7 +89,7 @@ class AlarmActivity : ComponentActivity() {
         val snoozeMinutes = calConfig?.snoozeMinutes ?: settings.defaultSnoozeMinutes
 
         setContent {
-            CalendarWakeTheme {
+            CalSyncAlarmTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

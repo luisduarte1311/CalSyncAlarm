@@ -60,7 +60,7 @@ class AlarmService : Service() {
         val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
         wakeLock = powerManager.newWakeLock(
             PowerManager.PARTIAL_WAKE_LOCK,
-            "CalendarWake:AlarmServiceWakeLock"
+            "CalSyncAlarm:AlarmServiceWakeLock"
         ).apply {
             setReferenceCounted(false)
             acquire(TIMEOUT_MILLIS + 10_000L)

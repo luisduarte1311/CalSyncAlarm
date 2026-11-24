@@ -16,7 +16,7 @@ import com.lduarte1311.calsyncalarm.data.AppSettings
 import com.lduarte1311.calsyncalarm.engine.AlarmScheduler
 import com.lduarte1311.calsyncalarm.engine.NotificationHelper
 import com.lduarte1311.calsyncalarm.engine.SyncWorker
-import com.lduarte1311.calsyncalarm.ui.theme.CalendarWakeTheme
+import com.lduarte1311.calsyncalarm.ui.theme.CalSyncAlarmTheme
 
 /**
  * Ponto de entrada da aplicação.
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
         SyncWorker.enqueuePeriodicSync(this)
 
         setContent {
-            CalendarWakeTheme {
+            CalSyncAlarmTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
