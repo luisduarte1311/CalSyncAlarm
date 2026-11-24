@@ -423,7 +423,7 @@ fun SettingsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Calendar Wake v1.3",
+                            text = "CalSyncAlarm v1.3",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )

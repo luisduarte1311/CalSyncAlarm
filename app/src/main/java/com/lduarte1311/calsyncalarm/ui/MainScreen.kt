@@ -171,7 +171,7 @@ fun MainScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Calendar Wake",
+                        text = "CalSyncAlarm",
                         fontWeight = FontWeight.Bold
                     )
                 },

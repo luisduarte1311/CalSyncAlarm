@@ -120,7 +120,7 @@ fun FirstLaunchScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Calendar Wake",
+                text = "CalSyncAlarm",
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
