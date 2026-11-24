@@ -9,7 +9,7 @@
 1. **Simplicidade Radical (Anti-Overengineering):** Menor quantidade de código limpo possível. Proibido criar factories, use-cases abstratos, Hilt/Dagger, Room/SQLite ou dependências pesadas desnecessárias.
 2. **Stack Enxuta:** Kotlin + Jetpack Compose (Material 3 / Material You com Dynamic Color em Android 12+). Apenas bibliotecas essenciais (AndroidX Core, Compose Material 3, WorkManager, SharedPreferences + org.json).
 3. **Ambiente Local:** O Windows tem OpenJDK 25 (`JAVA_HOME`) e Android SDK (`ANDROID_HOME`). Usar versão recente de Gradle / Android Gradle Plugin compatível com JDK 25, `compileSdk = 36`, `targetSdk = 36`, `minSdk = 26`.
-4. **Offline-First & Privacidade:** PROIBIDO declarar `INTERNET` ou `ACCESS_NETWORK_STATE` no `AndroidManifest.xml`. Zero anúncios, zero analytics, zero bibliotecas de rede.
+4. **Offline-First & Privacidade:** PROIBIDO declarar `INTERNET` ou `ACCESS_NETWORK_STATE` no `AndroidManifest.xml`. Zero anúncios, zero analytics, zero bibliotecas de rede. O WorkManager traz `ACCESS_NETWORK_STATE` no manifesto fundido; está removida de propósito com `tools:node="remove"`. `allowBackup="false"`.
 
 ## Arquitetura Funcional (V2 Multi-Calendário — Caminho B)
 
@@ -34,8 +34,18 @@
   - `AlarmScheduler`: Agrega os próximos 30 dias de todos os calendários ativos (`enabled == true`).
   - **Fila Única no `AlarmManager`:** Registar no sistema apenas **1** `setAlarmClock()` (o próximo alarme cronológico ativo entre todos os calendários) e 1 agendamento para a respetiva notificação pré-alarme. Ao disparar/dispensar/saltar/adiar, agendar o seguinte.
   - Chave única por ocorrência no calendário: `EVENT_ID + BEGIN`. Limpeza automática de ocorrências com mais de 24h no passado.
-  - `AlarmService`: `ForegroundService` (`foregroundServiceType="mediaPlayback"`) aplicando os parâmetros específicos de volume, som e vibração do calendário do evento + timeout de segurança de 10 minutos (faz Dismiss + notificação silenciosa "Alarme perdido").
-  - `InitReceiver` (`BOOT_COMPLETED`, `LOCKED_BOOT_COMPLETED`, `TIME_SET`, `TIMEZONE_CHANGED`, `MY_PACKAGE_REPLACED`) + `SyncWorker` periódico via `WorkManager`.
+  - **Falha de leitura ≠ sem eventos:** `CalendarReader.loadUpcomingOccurrences` devolve `null` se a leitura falhar. Nesse caso `AlarmScheduler.scheduleNextAlarm` NÃO mexe no alarme já agendado, mostra um aviso ("Não foi possível ler o calendário") e devolve `false`; `lastSyncTime` só é gravado se devolver `true`.
+  - **Reagendamento:** além de abrir a app, snooze/desligar/saltar e reinício, o próximo alarme é agendado logo ao disparar (`AlarmReceiver`) e quando o calendário muda (`SyncWorker.enqueueChangeObserver`: gatilho de conteúdo em `CalendarContract.CONTENT_URI`, pausa 10 s, máximo 1 min). O `SyncWorker` periódico (6 h) é rede de segurança.
+  - **Pré-alarme sem repetição:** `AppSettings.lastPreAlarmKey` guarda o último pré-alarme mostrado; o aviso aparece uma só vez por alarme e o obsoleto é cancelado.
+  - **Filtros do calendário:** só eventos com hora (sem dia inteiro), não cancelados e com convite não recusado (`SELF_ATTENDEE_STATUS != DECLINED`).
+  - **Evento sem alarme:** se a antecedência já passou e o evento ainda não começou, uma notificação avisa (uma por evento, uma só vez; `AppSettings.noAlarmNotifiedKeys`). Eventos cujo alarme já tocou não contam; a primeira execução só regista, sem avisar.
+  - `AlarmService`: `ForegroundService` (`foregroundServiceType="mediaPlayback"`) aplicando os parâmetros específicos de volume, som e vibração do calendário do evento + timeout de segurança de 10 minutos (faz Dismiss + notificação silenciosa "Alarme perdido"). O volume original só é guardado uma vez (dois alarmes seguidos não corrompem a reposição).
+  - `InitReceiver` (`BOOT_COMPLETED`, `TIME_SET`, `TIMEZONE_CHANGED`, `MY_PACKAGE_REPLACED`; não exportado e sem Direct Boot, porque antes do desbloqueio nem as definições nem o calendário estão acessíveis) + `SyncWorker` periódico via `WorkManager`.
+
+## Diagnóstico
+
+- Erros do motor registam-se com `Log.e` e a tag `CalSyncAlarm` (`adb logcat -s CalSyncAlarm`).
+- Alarmes agendados: `adb shell dumpsys alarm` filtrado por `calsyncalarm`.
 
 ## Critério de Conclusão
 
