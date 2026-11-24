@@ -62,7 +62,8 @@ object CalendarReader {
 
     /**
      * Consulta as instâncias de eventos nos próximos 30 dias para o calendário especificado.
-     * Aplica os filtros: ALL_DAY == 0, STATUS != STATUS_CANCELED e alarmTime > agora.
+     * Aplica os filtros: ALL_DAY == 0, STATUS != STATUS_CANCELED, convite não recusado
+     * (SELF_ATTENDEE_STATUS != DECLINED) e alarmTime > agora.
      * Devolve null se a leitura falhar (sem permissão, erro do fornecedor ou cursor nulo);
      * lista vazia significa que a leitura correu bem e não há eventos.
      */
@@ -94,14 +95,17 @@ object CalendarReader {
             CalendarContract.Instances.STATUS
         )
 
-        // Filtro: apenas eventos do calendário escolhido, sem dia inteiro e não cancelados
+        // Filtro: apenas eventos do calendário escolhido, sem dia inteiro, não cancelados
+        // e cujo convite o utilizador não recusou
         val selection = "${CalendarContract.Instances.CALENDAR_ID} = ? AND " +
                 "${CalendarContract.Instances.ALL_DAY} = 0 AND " +
-                "(${CalendarContract.Instances.STATUS} IS NULL OR ${CalendarContract.Instances.STATUS} != ?)"
+                "(${CalendarContract.Instances.STATUS} IS NULL OR ${CalendarContract.Instances.STATUS} != ?) AND " +
+                "(${CalendarContract.Instances.SELF_ATTENDEE_STATUS} IS NULL OR ${CalendarContract.Instances.SELF_ATTENDEE_STATUS} != ?)"
 
         val selectionArgs = arrayOf(
             calendarId.toString(),
-            CalendarContract.Instances.STATUS_CANCELED.toString()
+            CalendarContract.Instances.STATUS_CANCELED.toString(),
+            CalendarContract.Attendees.ATTENDEE_STATUS_DECLINED.toString()
         )
 
         val offsetMillis = offsetMinutes * 60_000L
