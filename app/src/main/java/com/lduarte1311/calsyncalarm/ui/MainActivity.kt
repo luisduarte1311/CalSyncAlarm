@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
         // Inicializar canais de notificação e agendamento de sincronização
         NotificationHelper.createChannels(this)
         SyncWorker.enqueuePeriodicSync(this)
+        SyncWorker.enqueueChangeObserver(this)
 
         setContent {
             CalSyncAlarmTheme {

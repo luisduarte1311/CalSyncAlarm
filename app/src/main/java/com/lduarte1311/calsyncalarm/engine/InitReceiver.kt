@@ -21,6 +21,7 @@ class InitReceiver : BroadcastReceiver() {
 
                 // Garantir agendamento periódico no WorkManager
                 SyncWorker.enqueuePeriodicSync(context)
+                SyncWorker.enqueueChangeObserver(context)
             }
         }
     }
