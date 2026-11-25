@@ -1,5 +1,7 @@
 package com.lduarte1311.calsyncalarm.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -11,15 +13,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 /**
- * Diálogo "Sobre e informações": privacidade, aviso legal e licenças de terceiros.
- * Só texto; não usa rede nem permissões.
+ * Diálogo "Sobre e informações": privacidade, aviso legal, licença do código e licenças de terceiros.
+ * Só texto e uma ligação que abre o navegador por Intent; não usa rede nem permissões.
  */
 @Composable
 fun AboutDialog(onDismiss: () -> Unit) {
+    val context = LocalContext.current
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Sobre e informações") },
@@ -39,10 +43,32 @@ fun AboutDialog(onDismiss: () -> Unit) {
                         "apenas desta aplicação para compromissos críticos."
                 )
                 AboutSection(
+                    "Licença e código",
+                    "Código disponível em github.com/luisduarte1311/CalSyncAlarm sob a licença " +
+                        "PolyForm Noncommercial 1.0.0: podes ver, usar e modificar o código para " +
+                        "fins não comerciais, mantendo o aviso de autoria (Copyright 2026 Luís " +
+                        "Duarte). O uso comercial exige um acordo com o autor: " +
+                        "calsyncalarm.contact@gmail.com.",
+                    spacing = 0
+                )
+                TextButton(
+                    onClick = {
+                        try {
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://github.com/luisduarte1311/CalSyncAlarm")
+                                )
+                            )
+                        } catch (_: Exception) { }
+                    }
+                ) { Text("Ver código no GitHub") }
+                Spacer(modifier = Modifier.height(12.dp))
+                AboutSection(
                     "Licenças de terceiros",
                     "Esta aplicação usa componentes Apache License 2.0 (Android Open Source " +
                         "Project, Google): AndroidX Core, Lifecycle, Activity, Jetpack Compose " +
-                        "(UI, Material 3 e Material Icons), WorkManager; e a biblioteca padrão " +
+                        "(UI, Material 3, Material Icons e os desenhos do ícone da aplicação), WorkManager; e a biblioteca padrão " +
                         "do Kotlin (JetBrains). Texto da licença: apache.org/licenses/LICENSE-2.0"
                 )
             }
@@ -54,7 +80,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
 }
 
 @Composable
-private fun AboutSection(title: String, body: String) {
+private fun AboutSection(title: String, body: String, spacing: Int = 16) {
     Text(
         text = title,
         style = MaterialTheme.typography.titleSmall,
@@ -63,5 +89,5 @@ private fun AboutSection(title: String, body: String) {
     )
     Spacer(modifier = Modifier.height(4.dp))
     Text(text = body, style = MaterialTheme.typography.bodySmall)
-    Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(spacing.dp))
 }
