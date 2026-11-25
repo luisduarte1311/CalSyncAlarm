@@ -642,7 +642,11 @@ fun MainScreen(
                                             refreshTrigger++
                                         },
                                     colors = CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.surface
+                                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                    ),
+                                    border = BorderStroke(
+                                        1.dp,
+                                        MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
                                     ),
                                     shape = RoundedCornerShape(12.dp)
                                 ) {
