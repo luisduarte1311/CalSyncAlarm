@@ -23,6 +23,6 @@ As versões são as resolvidas pelo Gradle na compilação e podem mudar em vers
 
 Android Gradle Plugin, plugin do Compose para o Kotlin e Gradle Wrapper (`gradle/wrapper/gradle-wrapper.jar`, Apache 2.0).
 
-## Fontes e imagens
+## Ícones e imagens
 
-Sem fontes nem imagens de terceiros. O ícone da aplicação é do autor.
+Os desenhos vetoriais usados no ícone da aplicação e no ícone de alarme (`ic_launcher_foreground.xml`, `baseline_add_alarm_24.xml`) derivam dos Material Icons da Google, sob Apache License 2.0, e os ficheiros mantêm o cabeçalho original. A composição e as cores do ícone são do autor. Os restantes ficheiros do ícone (`ic_launcher*.webp`, `ic_launcher-playstore.png`) são versões geradas do mesmo desenho. Sem fontes nem outras imagens de terceiros.
