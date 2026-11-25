@@ -27,7 +27,7 @@
   - Títulos limpos e elegantes (sem numeração `1.`, `2.`, etc.).
   - **Definições Globais (aberto pelo topo):** Padrões aplicados ao adicionar novos calendários (Antecedência, Som, Volume 0–100%, Vibração, Snooze e Notificação Pré-Alarme).
   - **Definições de Calendário (aberto pelo cartão do calendário):** Regras isoladas desse calendário específico mais botão discreto **"Remover este Calendário"** com confirmação.
-  - **Cartão "Sobre" (fim das Definições, igual nas globais e nas de calendário):** ícone em círculo, "CalSyncAlarm", versão lida do `PackageInfo` (não é texto fixo), "Desenvolvido por Luís Duarte", linha "Sobre e informações" (`AboutDialog`: privacidade, aviso legal, licenças de terceiros), "Reportar um problema" (botão que abre o email por `mailto:` com versão, modelo e Android; sem rede) e o botão do café (`paypal.me/lduarte1311`) **só nas Definições Globais**, de propósito (nas de calendário seria insistente). Cartão neutro como os restantes.
+  - **Cartão "Sobre" (fim das Definições, igual nas globais e nas de calendário):** ícone em círculo, "CalSyncAlarm", versão lida do `PackageInfo` (não é texto fixo), "Desenvolvido por Luís Duarte", linha "Sobre e informações" (`AboutDialog`: privacidade, aviso legal, licença PolyForm com botão "Ver código no GitHub", licenças de terceiros), "Reportar um problema" (botão que abre o email por `mailto:` com versão, modelo e Android; sem rede) e o botão do café (`paypal.me/lduarte1311`) **só nas Definições Globais**, de propósito (nas de calendário seria insistente). Cartão neutro como os restantes.
   - **Tempos Personalizados:** Seletores de Antecedência, Snooze e Pré-Alarme com presets + opção "Personalizado..." com campos numéricos (horas/minutos) e validação >= 1 min.
   - **Navegação com `BackHandler`:** Suporte a pilha de ecrãs no Compose, garantindo regresso exato ao ecrã anterior com o gesto/botão Voltar.
 - **Ecrã de Despertar (`AlarmActivity`):** Activity isolada (`taskAffinity=""`, `excludeFromRecents="true"`, `showWhenLocked`, `turnScreenOn`, `USE_FULL_SCREEN_INTENT`). Mostra Hora + Evento + início do evento + **Snooze** (com tempo configurado do calendário) + **Desligar** direto.
@@ -46,8 +46,8 @@
 
 ## Distribuição e licença
 
-- Código fechado: o repositório principal (`luisduarte1311/CalSyncAlarm`) é privado e a app não se diz "open source". Está previsto um segundo repositório público só com README, capturas de ecrã e o APK em Releases; mais tarde o código poderá abrir-se.
-- Versão atual: 1.5 (`versionCode 5`), etiqueta `v1.5`. A versão debug e a release usam chaves diferentes; nunca se distribui o APK debug.
+- Código público (source-available) no próprio repositório `luisduarte1311/CalSyncAlarm`, sob a licença PolyForm Noncommercial 1.0.0 (`LICENSE`, com a linha `Required Notice`). Avisos de terceiros em `THIRD_PARTY_NOTICES.md` e apresentação em `README.md`. Nunca dizer "open source" (a licença não é aprovada pela OSI). Uso comercial só por acordo com o autor; aceitam-se issues e sugestões, não pull requests.
+- Versão atual: 1.6 (`versionCode 6`), etiqueta `v1.6`. A versão debug e a release usam chaves diferentes; nunca se distribui o APK debug.
 - O `enableEdgeToEdge()` da `MainActivity` tem a película de contraste da barra de navegação desligada (`isNavigationBarContrastEnforced = false`) para não aparecer uma faixa branca no tema claro.
 
 ## Diagnóstico
