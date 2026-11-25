@@ -47,8 +47,24 @@
 ## Distribuição e licença
 
 - Código público (source-available) no próprio repositório `luisduarte1311/CalSyncAlarm`, sob a licença PolyForm Noncommercial 1.0.0 (`LICENSE`, com a linha `Required Notice`). Avisos de terceiros em `THIRD_PARTY_NOTICES.md` e apresentação em `README.md`. Nunca dizer "open source" (a licença não é aprovada pela OSI). Uso comercial só por acordo com o autor; aceitam-se issues e sugestões, não pull requests.
-- Versão atual: 1.6 (`versionCode 6`), etiqueta `v1.6`. A versão debug e a release usam chaves diferentes; nunca se distribui o APK debug.
+- Versão atual: 2.0 (`versionCode 7`), etiqueta `v2.0` (a `v1.6` ficou só como marco, sem release). A versão debug e a release usam chaves diferentes; nunca se distribui o APK debug.
 - O `enableEdgeToEdge()` da `MainActivity` tem a película de contraste da barra de navegação desligada (`isNavigationBarContrastEnforced = false`) para não aparecer uma faixa branca no tema claro.
+
+## Release assinada
+
+- A chave (`.jks`) vive **fora do repositório** e nunca se lê nem se partilha; o `.gitignore` ignora `*.jks` e `*.keystore`. Sem a chave não se atualiza uma release já instalada: manter uma cópia fora do portátil e a palavra-passe num gestor de palavras-passe.
+- `app/build.gradle.kts` assina a release só se existir a variável `CALSYNC_KEYSTORE`; a palavra-passe vem de `CALSYNC_KEYSTORE_PASS` e o alias (por defeito `calsyncalarm`) de `CALSYNC_KEY_ALIAS`. Sem variáveis, a compilação debug funciona igual.
+- Compilar (PowerShell; a palavra-passe pede-se em modo oculto e a variável apaga-se no fim):
+
+  ```powershell
+  $env:CALSYNC_KEYSTORE = "C:\caminho\fora\do\repositorio\calsyncalarm-release.jks"; $s = Read-Host "Palavra-passe da chave" -AsSecureString; $env:CALSYNC_KEYSTORE_PASS = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($s)); .\gradlew.bat assembleRelease; Remove-Item Env:CALSYNC_KEYSTORE_PASS; Remove-Item Env:CALSYNC_KEYSTORE; .\gradlew.bat --stop
+  ```
+
+  O APK fica em `app/build/outputs/apk/release/app-release.apk` (se vier `-unsigned`, a variável não chegou ao Gradle).
+- Verificar com as `build-tools` do SDK (usar o Java do Android Studio, não um Java 8 do PATH): `apksigner.jar verify --verbose --print-certs <apk>` deve dizer `Verifies` e o certificado `CN=Luis Duarte, C=PT`; `aapt2 dump badging <apk>` deve mostrar a versão certa e **nenhuma** permissão `INTERNET` nem `ACCESS_NETWORK_STATE`. Calcular o SHA-256 com `Get-FileHash <apk> -Algorithm SHA256`.
+- Certificado de assinatura (SHA-256): `053239e92bf956c573c88005a1b585abc810247edcf0ac98b981134431418d6a`.
+- Publicar: copiar o APK para uma pasta fora do repositório como `CalSyncAlarm-<versão>.apk`, criar a etiqueta `v<versão>` no commit final do `master` e criar a release no GitHub com o APK anexado e o SHA-256 nas notas (licença PolyForm, linha `Required Notice` e ligação aos avisos de terceiros).
+- Passar da debug para a release no telemóvel obriga a desinstalar a debug (chaves diferentes) e perde os dados da app. Nunca se distribui o APK debug.
 
 ## Diagnóstico
 
