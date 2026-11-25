@@ -27,6 +27,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.Coffee
 import androidx.compose.material.icons.filled.DeleteOutline
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.NotificationsActive
@@ -521,6 +522,33 @@ fun SettingsScreen(
                             )
                         }
 
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // Reportar um problema (abre a app de email)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                Icons.Default.Email,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(modifier = Modifier.size(10.dp))
+                            Text(
+                                text = "Reportar um problema",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        OutlinedButton(
+                            onClick = { reportarProblema(context) },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(14.dp)
+                        ) {
+                            Text("Enviar email", fontWeight = FontWeight.Medium)
+                        }
+
                         if (isGlobalMode) {
                             Spacer(modifier = Modifier.height(8.dp))
                             FilledTonalButton(
@@ -962,6 +990,27 @@ fun SettingsScreen(
             )
         }
     }
+}
+
+/** Abre a app de email com versão e modelo preenchidos (sem rede nem permissões). */
+private fun reportarProblema(context: android.content.Context) {
+    val versao = try {
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName
+    } catch (_: Exception) {
+        null
+    } ?: "?"
+    val assunto = "CalSyncAlarm v$versao – problema"
+    val corpo = "Descreve o problema:\n\n\n---\nVersão: $versao\n" +
+        "Telemóvel: ${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}\n" +
+        "Android: ${android.os.Build.VERSION.RELEASE}"
+    // Assunto e corpo vão dentro do próprio mailto: (alguns clientes ignoram os extras do Intent)
+    val uri = Uri.parse(
+        "mailto:calsyncalarm.contact@gmail.com" +
+            "?subject=${Uri.encode(assunto)}&body=${Uri.encode(corpo)}"
+    )
+    try {
+        context.startActivity(Intent(Intent.ACTION_SENDTO, uri))
+    } catch (_: Exception) { }
 }
 
 @Composable

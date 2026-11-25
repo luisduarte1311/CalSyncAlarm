@@ -1,8 +1,5 @@
 package com.lduarte1311.calsyncalarm.ui
 
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -12,42 +9,17 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 /**
  * Diálogo "Sobre e informações": privacidade, aviso legal e licenças de terceiros.
- * Texto e um botão que abre a app de email; não usa rede nem permissões.
+ * Só texto; não usa rede nem permissões.
  */
 @Composable
 fun AboutDialog(onDismiss: () -> Unit) {
-    val context = LocalContext.current
-
-    // Abre a app de email com versão e modelo preenchidos (sem rede nem permissões)
-    fun reportarProblema() {
-        val versao = try {
-            context.packageManager.getPackageInfo(context.packageName, 0).versionName
-        } catch (_: Exception) {
-            null
-        } ?: "?"
-        val assunto = "CalSyncAlarm v$versao – problema"
-        val corpo = "Descreve o problema:\n\n\n---\nVersão: $versao\n" +
-            "Telemóvel: ${Build.MANUFACTURER} ${Build.MODEL}\nAndroid: ${Build.VERSION.RELEASE}"
-        // Assunto e corpo vão dentro do próprio mailto: (alguns clientes ignoram os extras do Intent)
-        val uri = Uri.parse(
-            "mailto:calsyncalarm.contact@gmail.com" +
-                "?subject=${Uri.encode(assunto)}&body=${Uri.encode(corpo)}"
-        )
-        val intent = Intent(Intent.ACTION_SENDTO, uri)
-        try {
-            context.startActivity(intent)
-        } catch (_: Exception) { }
-    }
-
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Sobre e informações") },
@@ -73,13 +45,6 @@ fun AboutDialog(onDismiss: () -> Unit) {
                         "(UI, Material 3 e Material Icons), WorkManager; e a biblioteca padrão " +
                         "do Kotlin (JetBrains). Texto da licença: apache.org/licenses/LICENSE-2.0"
                 )
-                AboutSection(
-                    "Reportar um problema",
-                    "Abre o teu email com a versão e o modelo do telemóvel já preenchidos."
-                )
-                OutlinedButton(onClick = { reportarProblema() }) {
-                    Text("Enviar email")
-                }
             }
         },
         confirmButton = {
