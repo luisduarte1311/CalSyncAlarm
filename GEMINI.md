@@ -14,18 +14,20 @@
 ## Arquitetura Funcional (V2 Multi-Calendário — Caminho B)
 
 - **Propósito:** Gerir múltiplos calendários do sistema (`CalendarContract`), cada um com a sua própria configuração isolada de antecedência, toque, volume, vibração, snooze e pré-alarme.
-- **Primeiro Arranque:** Sem carrosséis. Ecrã limpo com crédito discreto ao autor + botão `+` para listar calendários locais (mostrando Nome + Conta/Tipo) → adiciona calendário com valores pré-definidos sensatos (`1h30`, volume `90%`, snooze `10m`, vibração `ON`, pré-alarme `2h`).
+- **Primeiro Arranque:** Sem carrosséis. Ecrã limpo com crédito discreto ao autor + botão `+` para listar calendários locais (mostrando Nome + email da conta, sem o tipo "(com.google)") → adiciona calendário com valores pré-definidos sensatos (`1h30`, volume `90%`, snooze `10m`, vibração `ON`, pré-alarme `2h`).
 - **UI Principal — Caminho B (`MainScreen`):**
   - Barra de ações no topo: botões `+` (adicionar calendário), `▶` (testar alarme), `↻` (atualizar todos os calendários com carimbo de hora) e `⚙` (Definições Globais / padrões para novos calendários).
   - Semáforo de permissões inteligente no topo (só visível se faltar alguma: `READ_CALENDAR`, `POST_NOTIFICATIONS` >= API 33, `canScheduleExactAlarms` >= API 31, `canUseFullScreenIntent` >= API 34, e atalho opcional para "Bateria sem restrições").
   - **Cartão Destacado com o Próximo Alarme Global:** Hora grande, data, nome do calendário associado e título do evento.
   - **Cartão Destacado de Snooze Ativo:** Visível quando há um alarme adiado, com hora de retorno e botão direto **"Desligar"**.
   - **Lista de Calendários Adicionados:** Cada cartão apresenta nome, conta, indicador de cor, contador de alarmes ativos, interruptor `ON/OFF` do calendário e botão `⚙` para aceder às definições isoladas desse calendário.
+  - **Cartões neutros (tema claro e escuro):** os cartões da lista de calendários, da lista de alarmes de um calendário (`CalendarEventsScreen`) e das folhas de escolha de calendário usam `surfaceVariant` a 50 % com borda fina `outlineVariant` a 40 %; o desativado fica a 25 % e sem borda. A etiqueta do calendário no cartão do próximo alarme é opaca (`surface` + `onSurface`) para ter contraste em qualquer tema.
   - Tocar num cartão abre o ecrã `CalendarEventsScreen` com a lista dos próximos **30 dias** desse calendário específico e interruptores individuais `ON/OFF` por ocorrência.
 - **Ecrã de Definições Limpo (`SettingsScreen`):**
   - Títulos limpos e elegantes (sem numeração `1.`, `2.`, etc.).
   - **Definições Globais (aberto pelo topo):** Padrões aplicados ao adicionar novos calendários (Antecedência, Som, Volume 0–100%, Vibração, Snooze e Notificação Pré-Alarme).
   - **Definições de Calendário (aberto pelo cartão do calendário):** Regras isoladas desse calendário específico mais botão discreto **"Remover este Calendário"** com confirmação.
+  - **Cartão "Sobre" (fim das Definições, igual nas globais e nas de calendário):** ícone em círculo, "CalSyncAlarm", versão lida do `PackageInfo` (não é texto fixo), "Desenvolvido por Luís Duarte", linha "Sobre e informações" (`AboutDialog`: privacidade, aviso legal, licenças de terceiros), "Reportar um problema" (botão que abre o email por `mailto:` com versão, modelo e Android; sem rede) e o botão do café (`paypal.me/lduarte1311`) **só nas Definições Globais**, de propósito (nas de calendário seria insistente). Cartão neutro como os restantes.
   - **Tempos Personalizados:** Seletores de Antecedência, Snooze e Pré-Alarme com presets + opção "Personalizado..." com campos numéricos (horas/minutos) e validação >= 1 min.
   - **Navegação com `BackHandler`:** Suporte a pilha de ecrãs no Compose, garantindo regresso exato ao ecrã anterior com o gesto/botão Voltar.
 - **Ecrã de Despertar (`AlarmActivity`):** Activity isolada (`taskAffinity=""`, `excludeFromRecents="true"`, `showWhenLocked`, `turnScreenOn`, `USE_FULL_SCREEN_INTENT`). Mostra Hora + Evento + início do evento + **Snooze** (com tempo configurado do calendário) + **Desligar** direto.
@@ -41,6 +43,12 @@
   - **Evento sem alarme:** se a antecedência já passou e o evento ainda não começou, uma notificação avisa (uma por evento, uma só vez; `AppSettings.noAlarmNotifiedKeys`). Eventos cujo alarme já tocou não contam; a primeira execução só regista, sem avisar.
   - `AlarmService`: `ForegroundService` (`foregroundServiceType="mediaPlayback"`) aplicando os parâmetros específicos de volume, som e vibração do calendário do evento + timeout de segurança de 10 minutos (faz Dismiss + notificação silenciosa "Alarme perdido"). O volume original só é guardado uma vez (dois alarmes seguidos não corrompem a reposição).
   - `InitReceiver` (`BOOT_COMPLETED`, `TIME_SET`, `TIMEZONE_CHANGED`, `MY_PACKAGE_REPLACED`; não exportado e sem Direct Boot, porque antes do desbloqueio nem as definições nem o calendário estão acessíveis) + `SyncWorker` periódico via `WorkManager`.
+
+## Distribuição e licença
+
+- Código fechado: o repositório principal (`luisduarte1311/CalSyncAlarm`) é privado e a app não se diz "open source". Está previsto um segundo repositório público só com README, capturas de ecrã e o APK em Releases; mais tarde o código poderá abrir-se.
+- Versão atual: 1.5 (`versionCode 5`), etiqueta `v1.5`. A versão debug e a release usam chaves diferentes; nunca se distribui o APK debug.
+- O `enableEdgeToEdge()` da `MainActivity` tem a película de contraste da barra de navegação desligada (`isNavigationBarContrastEnforced = false`) para não aparecer uma faixa branca no tema claro.
 
 ## Diagnóstico
 
