@@ -1,5 +1,6 @@
 package com.lduarte1311.calsyncalarm.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -214,12 +215,17 @@ fun CalendarEventsScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 6.dp),
                         colors = CardDefaults.cardColors(
+                            // Cinzento subtil, um degrau acima do fundo (igual ao ecrã principal)
                             containerColor = if (item.isEnabled && cal.enabled) {
-                                MaterialTheme.colorScheme.surface
+                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                             } else {
-                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f)
                             }
                         ),
+                        border = if (item.isEnabled && cal.enabled) BorderStroke(
+                            1.dp,
+                            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+                        ) else null,
                         shape = RoundedCornerShape(16.dp)
                     ) {
                         Row(
