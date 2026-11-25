@@ -23,3 +23,7 @@ Thumbs.db
 # Chaves de assinatura (nunca vao para o Git)
 *.jks
 *.keystore
+
+# Ferramentas de agente (nao vao para o Git)
+.agent/
+Claude outputs/
