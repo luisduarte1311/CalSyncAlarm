@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -319,7 +320,7 @@ fun MainScreen(
                                 // Tag do Calendário associado
                                 Card(
                                     colors = CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f)
+                                        containerColor = MaterialTheme.colorScheme.surface
                                     ),
                                     shape = RoundedCornerShape(12.dp)
                                 ) {
@@ -340,7 +341,8 @@ fun MainScreen(
                                         Text(
                                             text = alarm.calendarDisplayName,
                                             style = MaterialTheme.typography.labelMedium,
-                                            fontWeight = FontWeight.Medium
+                                            fontWeight = FontWeight.Medium,
+                                            color = MaterialTheme.colorScheme.onSurface
                                         )
                                     }
                                 }
@@ -502,9 +504,14 @@ fun MainScreen(
                                 onNavigateToCalendarEvents(cal.id)
                             },
                         colors = CardDefaults.cardColors(
-                            containerColor = if (cal.enabled) MaterialTheme.colorScheme.surface
-                            else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                            // Cinzento subtil, um degrau acima do fundo, para o cartão se distinguir
+                            containerColor = if (cal.enabled) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                            else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f)
                         ),
+                        border = if (cal.enabled) BorderStroke(
+                            1.dp,
+                            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+                        ) else null,
                         shape = RoundedCornerShape(16.dp)
                     ) {
                         Row(
